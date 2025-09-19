@@ -210,6 +210,17 @@ Note: the Azure DevOps repository is assumed to be new and empty. Recommended in
 
 If you want, I can scaffold the initial `azure-pipelines.yml` and a minimal first commit structure to push into the empty Azure repo.
 
+**Agent Decision Policy**
+- The repository owner authorizes the AI agent to proceed with implementation and recommendations that align with the user's stated goals without asking for explicit approval for trivial or inferable decisions.
+- The agent should only pause and request confirmation for "critical" decisions, including but not limited to:
+  - Changing authentication flows or app registration configuration that affect production security.
+  - Modifying Key Vault secret names, rotating secrets, or placing secrets into code or configuration.
+  - Making breaking infrastructure changes that could delete or significantly alter deployed resources (for example, deleting resource groups or modifying private-networking that impacts private endpoints).
+  - Actions with substantial billable impact (provisioning large SKUs, large capacity changes, or potentially runaway costs).
+  - Publishing releases, changing ownership, or altering license metadata.
+- For all non-critical decisions the agent will proceed, record actions in the TODO list, use sensible git commit messages and branch names, and push changes to the secondary remote (`ado_brangi`) when appropriate.
+- If uncertain whether a decision is critical, the agent will err on the side of asking for confirmation.
+
 19. Git branching strategy (revised GitFlow)
 - Default branch: `main` is the production branch and always reflects production-ready code.
 - Release branches: create release branches named `release/x.y.z` (semver). Each release branch is tagged with the same semver and additionally `latest`.
