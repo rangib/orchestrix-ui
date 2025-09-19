@@ -14,3 +14,4 @@ stages:
   - template: .azure/pipelines/templates/check-code.yml
   - template: .azure/pipelines/templates/check-infra.yml
   - template: .azure/pipelines/templates/check-deps.yml
+  - template: .azure/pipelines/templates/packages-build.yml
