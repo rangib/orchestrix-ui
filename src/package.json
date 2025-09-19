@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run build:components && next build",
+    "build:components": "../scripts/build-components.sh",
     "start": "next start",
     "lint": "next lint",
     "debug": "set NODE_OPTIONS=--inspect && next dev",
