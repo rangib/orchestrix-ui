@@ -1,0 +1,15 @@
+{
+  "entries": [
+    "components/ux-button/ux-button.js",
+    "components/ux-card/ux-card.js",
+    "components/ux-icon/ux-icon.js",
+    "components/ux-input/ux-input.js"
+  ],
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "4.37.0",
+    "typescriptVersion": "5.5.4"
+  },
+  "collections": [],
+  "bundles": []
+}

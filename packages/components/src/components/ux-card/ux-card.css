@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.card {
+  border-radius: 0.5rem;
+  background: white;
+  overflow: hidden;
+}
+
+.card.default {
+  border: 1px solid #e5e7eb;
+}
+
+.card.elevated {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.card.outlined {
+  border: 2px solid #e5e7eb;
+}
+
+.card.sm {
+  padding: 0.75rem;
+}
+
+.card.md {
+  padding: 1.5rem;
+}
+
+.card.lg {
+  padding: 2rem;
+}
+
+.card-header {
+  margin-bottom: 1rem;
+}
+
+.card-header:empty {
+  display: none;
+  margin: 0;
+}
+
+.card-body {
+  flex: 1;
+}
+
+.card-footer {
+  margin-top: 1rem;
+}
+
+.card-footer:empty {
+  display: none;
+  margin: 0;
+}

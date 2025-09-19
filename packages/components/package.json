@@ -5,6 +5,7 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.mjs",
   "types": "dist/types/components.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
   "files": ["dist"],
   "scripts": {
     "build": "stencil build --docs --prerender",

@@ -2,10 +2,11 @@ import { AI_NAME } from "@/features/theme/theme-config";
 import { ThemeProvider } from "@/features/theme/theme-provider";
 import { Toaster } from "@/features/ui/toaster";
 import { cn } from "@/ui/lib";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google"; // Temporarily disabled due to DNS block
+import { StencilLoader } from "@/components/StencilLoader";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] }); // Temporarily disabled
 
 export const metadata = {
   title: AI_NAME,
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full w-full overflow-hidden text-sm">
       <body
-        className={cn(inter.className, "h-full w-full flex  bg-background")}
+        className={cn("font-inter h-full w-full flex bg-background")} // Using CSS font-family instead
       >
         <ThemeProvider
           attribute="class"
@@ -30,7 +31,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <StencilLoader>
+            {children}
+          </StencilLoader>
           <Toaster />
         </ThemeProvider>
       </body>
