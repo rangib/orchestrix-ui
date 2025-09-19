@@ -1,7 +1,7 @@
 import { rest } from 'msw'
 
 export const handlers = [
-  rest.get('/api/health', (req, res, ctx) => {
+  rest.get('http://localhost:3000/api/health', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ status: 'ok' }))
   })
 ]
