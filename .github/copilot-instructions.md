@@ -248,6 +248,17 @@ If you want, I can scaffold the initial `azure-pipelines.yml` and a minimal firs
 - For all non-critical decisions the agent will proceed, record actions in the TODO list, use sensible git commit messages and branch names, and push changes to the secondary remote (`ado_brangi`) when appropriate.
 - If uncertain whether a decision is critical, the agent will err on the side of asking for confirmation.
 
+**Autonomous Progression Policy**
+
+- The repository owner requests the agent to continue working without prompting for next-step decisions until the user's stated goals are complete. To honor this, the agent will follow these rules:
+  - **Proceed Without Asking:** For non-critical tasks (linting, test scaffolding, package scaffolding, Storybook stories, adding CI jobs that only affect pipelines, local dev tooling, small docs edits, and non-production infra IaC drafts), the agent will proceed and commit changes to the `ado_brangi` remote on `main` or to feature branches as appropriate.
+  - **Record Actions:** All autonomous actions will be recorded in the repository `TODO` list and in the commit messages. The agent will keep the `TODO` list in-sync using the provided management tool.
+  - **Critical Decisions Still Require Approval:** The agent will pause and explicitly request confirmation for decisions that are critical as defined above in the Agent Decision Policy (auth changes, KeyVault secrets, destructive infra updates, publishing/releases with real-world cost impact, changing production configs, or creating/pushing credentials).
+  - **Progress Updates:** The agent will provide concise progress updates after making 3–5 tool calls or after creating/editing more than 3 files in a burst. Progress updates will include what changed, current TODO status, and next steps.
+  - **Safe Defaults:** When making autonomous choices (package names, story names, build script details, or minor infra placeholders), the agent will use safe, non-production defaults and note these in the commit message for later review.
+
+This policy supplements the Agent Decision Policy above and implements the user's request to avoid repeated confirmations for routine development tasks.
+
 19. Git branching strategy (revised GitFlow)
 - Default branch: `main` is the production branch and always reflects production-ready code.
 - Release branches: create release branches named `release/x.y.z` (semver). Each release branch is tagged with the same semver and additionally `latest`.
