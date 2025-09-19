@@ -56,7 +56,20 @@ The repository owner has mandated the following refactor goals — use these as 
 - Observability: add OpenTelemetry instrumentation in server routes and worker/edge entrypoints. Start by instrumenting `ChatAPIEntry` and middleware.
 
 17. Frontend framework and package upgrades
-- StencilJS: The repo owner requested considering `StencilJS` for shared web components. Do not replace existing React UI without a migration plan. If migrating, scaffold a small `packages/components` monorepo with Stencil build, storybook, and wrappers for React usage. Add a migration plan section documenting incremental steps, compatibility testing, and CI build steps.
+- StencilJS: The repo owner revised the request: the goal is to *introduce* a StencilJS-based component library as the canonical design-system surface, not to abruptly replace the existing React UI. The short-term objective is to scaffold a small `packages/components` monorepo that contains Stencil primitives and a Storybook-driven component catalog. The longer-term vision is full design-system integration (shared design tokens, theming, accessibility rules, visual regression tests, and consumable React wrappers).
+
+  Recommended approach:
+  - **Scaffold + CI:** Create `packages/components` (Stencil) + `packages/storybook`; add CI that builds Stencil, runs Storybook snapshot tests, and publishes package artifacts to a private npm feed on successful release branches.
+  - **Design tokens & theming:** Use a tokens source (JSON/YAML) and generate both Tailwind token variables and Stencil CSS variables so the design system can be consumed by React and web-component consumers consistently.
+  - **React wrappers:** Provide lightweight React wrappers that consume the Stencil web components (e.g., `react-wrappers/`), keeping prop types and event mappings clear. Start by wrapping a small set of primitives (button, input, modal) and expand iteratively.
+  - **Migration strategy:** Incremental migration only — keep existing React components until their Stencil equivalents are proven. For each component:
+    1. Implement Stencil primitive + Storybook entry.
+    2. Add React wrapper and update one surface (page or small feature) to consume it behind a feature flag.
+    3. Run accessibility, visual-regression, and unit tests; roll forward when green.
+  - **Documentation & docs site:** Publish a design-system site (Storybook + docs) with usage guidelines, tokens, accessibility checklist, and migration notes. Keep changelogs for breaking token or API changes.
+  - **Acceptance criteria:** Define measurable criteria per component: accessibility (axe), visual diff threshold, test coverage, and performance budget. Do not remove React originals until acceptance criteria are met and a migration PR is approved for each component.
+
+  Do not replace existing React UI without this migration plan and an explicit rollout schedule. Add a migration plan section documenting incremental steps, compatibility testing, CI build steps, and the design-system release cadence before implementing components.
 - Package upgrades: Add a policy to upgrade packages in a controlled manner:
   - Use Dependabot to propose minor/patch upgrades automatically.
   - Group major upgrades into a single feature branch and run full integration + e2e tests against `uat` before merging to `release/*`.
