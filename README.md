@@ -6,6 +6,8 @@ A new year brings some much requested feature updates to one of our most popular
 - `appreg_setup.ps1` and `appreg_setup.sh` helper scripts to **[create the App Registration for you](/docs/3-add-identity.md#entra-id-authentication-provider)** in Entra ID (if you have the permissions). Less copypasta means happier devs 🥰
 - Added support for private endpoints and ESLZ compliant deployment
 
+Note: This repository now includes a `packages/` folder with a scaffolded Stencil component library, Storybook examples, and React wrappers. See `packages/README.md` for details on how to run them locally.
+
 # Unleash the Power of Azure OpenAI
 
 1. [Introduction](#introduction)
