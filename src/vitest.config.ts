@@ -22,6 +22,6 @@ export default defineConfig({
     outputFile: {
       junit: './test-results.xml'
     },
-    reporter: ['default', 'junit']
+    reporters: ['default', 'junit']
   }
 })

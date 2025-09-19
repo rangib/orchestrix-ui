@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/features/theme/theme-provider";
 import { Toaster } from "@/features/ui/toaster";
 import { cn } from "@/ui/lib";
 import { Inter } from "next/font/google";
+import { StencilLoader } from "@/components/StencilLoader";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -30,7 +31,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <StencilLoader>
+            {children}
+          </StencilLoader>
           <Toaster />
         </ThemeProvider>
       </body>
