@@ -1,0 +1,27 @@
+# Checkov configuration for IaC security scanning
+# See: https://www.checkov.io/2.Basics/CLI%20Command%20Reference.html
+
+# Skip specific checks (add check IDs that are intentionally ignored)
+skip-check:
+  # Example: Skip checks that are not applicable to this project
+  # - CKV_AZURE_1  # Storage account should use HTTPS traffic only
+  
+# Custom frameworks to scan
+framework:
+  - arm
+  - bicep
+
+# Output format for CI/CD pipelines  
+output: sarif
+
+# Soft-fail mode (set to true during initial setup)
+soft-fail: true
+
+# Enable secrets detection
+enable-secret-scan-all-files: true
+
+# Custom policies directory (if you have custom checks)
+# external-checks-dir: .checkov/policies
+
+# Severity threshold (ERROR, WARNING, INFO)
+check: []
