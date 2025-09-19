@@ -1,0 +1,13 @@
+{
+  "name": "@orchestrix/react-wrappers",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "scripts": {
+    "build": "echo \"build wrappers\""
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  }
+}

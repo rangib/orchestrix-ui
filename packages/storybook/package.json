@@ -1,0 +1,12 @@
+{
+  "name": "@orchestrix/storybook",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@storybook/html": "^7.0.0"
+  }
+}
