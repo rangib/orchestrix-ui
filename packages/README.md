@@ -1,54 +1,63 @@
-# Packages
+# Orchestrix UI Component Library
 
-This folder contains scaffolds for the Stencil component library and Storybook.
+This directory contains the modular component library for the orchestrix-ui application, featuring Stencil web components, React wrappers, and comprehensive Storybook documentation.
 
-How to try locally (from repo root):
+## Architecture
 
-1. Install dependencies for a package (example: components):
+```
+packages/
+├── components/          # Stencil web components
+├── react-wrappers/      # React component wrappers
+└── storybook/          # Component documentation and examples
+```
 
-```pwsh
+## Quick Start
+
+### Development Setup
+```bash
+# Install dependencies for all packages
+npm install
+
+# Start Stencil component development
 cd packages/components
-npm install
 npm run start
-```
 
-2. Storybook (simple HTML-based example):
-
-```pwsh
+# Run Storybook for component documentation
 cd packages/storybook
-npm install
 npm run storybook
+
+# Build all components for production
+cd packages/components
+npm run build
 ```
 
-3. React wrapper usage (example)
+### Using Components in Next.js App
+```bash
+# Enable Stencil components
+cd src
+USE_STENCIL_COMPONENTS=true npm run dev
 
-```pwsh
-cd packages/react-wrappers
-npm install
+# Visit the demo page
+# http://localhost:3000/components-demo
 ```
 
-Then within a React app (Next.js), register the custom elements once (for example in `_app.tsx`):
+## Components
 
-```tsx
-import { useEffect } from 'react';
-import '@orchestrix/components'; // after building components, exposes custom elements
+### UxButton
+Professional button component with multiple variants and states.
 
-export default function App({ Component, pageProps }) {
-	useEffect(() => {
-		// any polyfills or loader registration can go here
-	}, []);
+**Variants**: `primary`, `secondary`, `outline`, `ghost`  
+**Sizes**: `sm`, `md`, `lg`  
+**States**: `disabled`, `loading`
 
-	return <Component {...pageProps} />;
-}
-```
+```html
+<!-- Web Component -->
+<ux-button variant="primary" size="md">Click Me</ux-button>
 
-And use the wrapper:
-
-```tsx
+<!-- React Wrapper -->
 import { UxButton } from '@orchestrix/react-wrappers';
-
-export default function Demo() {
-	return <UxButton variant="primary">Click me</UxButton>;
-}
+<UxButton variant="primary" onClick={handleClick}>Click Me</UxButton>
 ```
+
+This component library is part of the orchestrix-ui project and follows the same licensing terms.
 
