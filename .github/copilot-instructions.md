@@ -70,6 +70,12 @@ The repository owner has mandated the following refactor goals — use these as 
   - **Acceptance criteria:** Define measurable criteria per component: accessibility (axe), visual diff threshold, test coverage, and performance budget. Do not remove React originals until acceptance criteria are met and a migration PR is approved for each component.
 
   Do not replace existing React UI without this migration plan and an explicit rollout schedule. Add a migration plan section documenting incremental steps, compatibility testing, CI build steps, and the design-system release cadence before implementing components.
+  
+  Design inspiration:
+  - Use the Tailwind UI Blocks catalog (`https://tailwindcss.com/plus/ui-blocks`) as a primary design inspiration source. Pick a focused subset of Blocks (navigation, hero, pricing, forms, cards) as initial Stencil primitives and implement them as configurable, accessible, and responsive web components.
+  - Map each Block to design tokens and responsive variants; provide Storybook examples that demonstrate token overrides, ARIA patterns, and composition with other primitives.
+  - Keep a small prioritized backlog of Blocks to implement first (e.g., button, input, card, hero, nav). For each, include design token mapping, accessibility checklist, RTL support, and visual regression snapshots.
+  - Licensing: verify usage and redistribution constraints for any Tailwind Plus assets or examples; prefer reimplementation using your own tokens and Tailwind utilities rather than copying proprietary source files.
 - Package upgrades: Add a policy to upgrade packages in a controlled manner:
   - Use Dependabot to propose minor/patch upgrades automatically.
   - Group major upgrades into a single feature branch and run full integration + e2e tests against `uat` before merging to `release/*`.
