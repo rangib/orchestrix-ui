@@ -55,6 +55,13 @@ The repository owner has mandated the following refactor goals — use these as 
 - Testing + mocks: add unit tests under `src/__tests__/*`, integrate Mock Service Worker for client-side API mocking (`src/mocks/`), and server-side MSW setup for edge/runtime testing.
 - Observability: add OpenTelemetry instrumentation in server routes and worker/edge entrypoints. Start by instrumenting `ChatAPIEntry` and middleware.
 
+17. Frontend framework and package upgrades
+- StencilJS: The repo owner requested considering `StencilJS` for shared web components. Do not replace existing React UI without a migration plan. If migrating, scaffold a small `packages/components` monorepo with Stencil build, storybook, and wrappers for React usage. Add a migration plan section documenting incremental steps, compatibility testing, and CI build steps.
+- Package upgrades: Add a policy to upgrade packages in a controlled manner:
+  - Use Dependabot to propose minor/patch upgrades automatically.
+  - Group major upgrades into a single feature branch and run full integration + e2e tests against `uat` before merging to `release/*`.
+  - For each major upgrade create a short migration note in `docs/deps-upgrade.md` documenting breaking changes and test verification steps.
+
 8. Safety and review hints for AI agents
 - Always run type-check (`tsc`) and `npm run lint` locally in `src` after changes. If modifying infra, validate Bicep with `az bicep build` and run `azd` or `az deployment` dry-runs.
 - Do not change secrets or KeyVault names unless you update `infra/` and the README documentation.
