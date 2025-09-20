@@ -1,5 +1,7 @@
 # What's new - 2025
 
+[![Coverage](https://img.shields.io/codecov/c/gh/rangib/orchestrix-ui/main.svg)](https://codecov.io/gh/rangib/orchestrix-ui)
+
 A new year brings some much requested feature updates to one of our most popular AI chat repos!
 
 - **[Managed Identity-based security](/docs/9-managed-identities.md)**. This uses Azure's underlying RBAC and removes (almost) all keys/secrets.

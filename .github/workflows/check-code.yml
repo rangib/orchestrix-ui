@@ -9,6 +9,8 @@ on:
 jobs:
   check-code:
     runs-on: ubuntu-latest
+    env:
+      DISABLE_COVERAGE_COMMENT: ${{ secrets.DISABLE_COVERAGE_COMMENT }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
@@ -24,6 +26,14 @@ jobs:
         run: |
           cd src
           npm run lint
+      - name: Export ESLint SARIF
+        run: |
+          cd src
+          npx eslint . --ext .ts,.tsx,.js,.jsx --format sarif -o eslint.sarif || true
+      - name: Upload SARIF for ESLint
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: src/eslint.sarif
       - name: Type-check
         run: |
           cd src
@@ -37,8 +47,15 @@ jobs:
         with:
           name: coverage-report
           path: src/coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: src/coverage/**/coverage-final.json
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       - name: Post coverage summary to PR
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && env.DISABLE_COVERAGE_COMMENT != 'true'
         uses: actions/github-script@v7
         with:
           github-token: 
