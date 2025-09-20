@@ -1,0 +1,19 @@
+name: Check Infra
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  check-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Bicep (via Azure CLI action)
+        uses: azure/cli@v1
+        with:
+          inlineScript: |
+            az --version
+            az bicep build infra/main.bicep --stdout

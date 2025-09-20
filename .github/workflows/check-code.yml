@@ -1,0 +1,82 @@
+name: Check Code
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  check-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: |
+          cd src
+          npm i
+          npm ci
+      - name: Run lint
+        run: |
+          cd src
+          npm run lint
+      - name: Type-check
+        run: |
+          cd src
+          npx tsc --noEmit
+      - name: Run unit tests + coverage
+        run: |
+          cd src
+          npm run test:coverage -- --reporter verbose
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: src/coverage
+      - name: Post coverage summary to PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: 
+            ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs')
+            const path = 'src/coverage/coverage-summary.json'
+            if (!fs.existsSync(path)) {
+              core.info('No coverage summary found')
+              return
+            }
+            const summary = JSON.parse(fs.readFileSync(path, 'utf8'))
+            const s = summary.total
+            const body = `Coverage summary:\n- Lines: ${s.lines.pct}% (${s.lines.total} total)\n- Statements: ${s.statements.pct}% (${s.statements.total} total)\n- Functions: ${s.functions.pct}% (${s.functions.total} total)\n- Branches: ${s.branches.pct}% (${s.branches.total} total)`
+            const pr = context.payload.pull_request.number
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr,
+              body
+            })
+
+  integration-tests:
+    needs: check-code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: |
+          cd src
+          npm i
+          npm ci
+      - name: Run integration tests
+        run: |
+          cd src
+          npm ci
+          npm run test:integration
