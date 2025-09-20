@@ -32,12 +32,13 @@ jobs:
           npm install -D @playwright/test playwright
           npx playwright install --with-deps
 
-      - name: Start static server
+      - name: Start static server (repo root)
         run: |
-          npx http-server packages/components/test/runtime -p 8081 &
+          # Serve the repository root so runtime page can load bundle at /packages/components/dist/...
+          npx http-server -p 8083 -c-1 . &
           sleep 2
 
       - name: Run Playwright tests
         run: |
-          cd packages/components/test/playwright
-          npx playwright test --config=playwright.config.ts
+          cd packages/components
+          npx playwright test test/playwright --config=test/playwright/playwright.config.ts --reporter=list
