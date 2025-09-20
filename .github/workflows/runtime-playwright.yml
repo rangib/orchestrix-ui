@@ -1,0 +1,43 @@
+name: Runtime UI Playwright Tests
+
+on:
+  pull_request:
+    paths:
+      - 'packages/components/**'
+      - 'docs/**'
+
+jobs:
+  test-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install root deps
+        run: npm ci
+
+      - name: Build components
+        run: |
+          cd packages/components
+          npm ci
+          npm run build
+
+      - name: Install Playwright
+        run: |
+          cd packages/components
+          npm install -D @playwright/test playwright
+          npx playwright install --with-deps
+
+      - name: Start static server
+        run: |
+          npx http-server packages/components/test/runtime -p 8081 &
+          sleep 2
+
+      - name: Run Playwright tests
+        run: |
+          cd packages/components/test/playwright
+          npx playwright test --config=playwright.config.ts
