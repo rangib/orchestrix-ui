@@ -1,0 +1,5 @@
+{
+  "allow": true,
+  "version": "1.0",
+  "notes": "Test policy fixture for runtime smoke tests"
+}
