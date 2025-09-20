@@ -31,7 +31,7 @@ jobs:
           cd src
           npx eslint . --ext .ts,.tsx,.js,.jsx --format sarif -o eslint.sarif || true
       - name: Upload SARIF for ESLint
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: src/eslint.sarif
       - name: Type-check
