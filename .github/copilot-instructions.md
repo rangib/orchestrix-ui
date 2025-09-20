@@ -5,6 +5,7 @@
 This file tells AI coding agents how to be immediately productive in this repository.
 
 1. Big picture
+- Refer to `docs/PROJECT_MANIFEST.md` for the overall architecture, tech stack, and project conventions. Keep the manifest as the canonical source for agent-run rules and priorities.
 - Tech stack: Next.js 14 (app router), React 18, TypeScript, TailwindCSS. Backend logic lives in Next.js server routes under `src/app/(authenticated)/api/*` and feature services in `src/features/*`.
 - Cloud infra: Azure resources are authored in Bicep under `infra/` (main.bicep -> resources.bicep + modules). App deployment expects `output` values from the Bicep modules (App URL, KeyVault names, etc.).
 - Authentication: NextAuth is used; `src/middleware.ts` enforces authentication via `next-auth/jwt.getToken`. Infra controls `USE_MANAGED_IDENTITIES` via `disableLocalAuth` in Bicep.
@@ -163,8 +164,6 @@ The repository owner has mandated the following refactor goals — use these as 
 15. Review and standards
 - Follow industry best practices: fail-fast linting, SARIF uploads, IaC policy enforcement, supply-chain scanning, and least-privilege infra changes. Document any exceptions in `docs/` so reviewers know tradeoffs.
 
-If you want, I can scaffold the GitHub Actions workflow files and the local `scripts/ci-checks.ps1` next.
-
 16. Security scanning (recommended tools & CI integration)
 - Recommended scanners:
   - Checkov: IaC security scanning for Bicep/ARM/Terraform. Use for policy-as-code checks and CIS/OWASP rules.
@@ -187,8 +186,6 @@ If you want, I can scaffold the GitHub Actions workflow files and the local `scr
 - Automation & remediation:
   - Enable Dependabot + Snyk auto-fixes for dependency upgrades.
   - Configure Checkov exceptions via `.checkov.yml` and track approved exceptions in `docs/security-exceptions.md`.
-
-If you want, I can scaffold CI steps for these scanners (GitHub Actions), add minimal config files (`.checkov.yml`, `trivy` scan steps, `semgrep.yml`), and wire SARIF uploads. Tell me which scanners to prioritize first.
 
 If anything in this file is unclear or you'd like me to expand a section (for example: generate a concrete Terraform module plan, or start the APIM + two-app-registration work), tell me which item to prioritize next.
 
@@ -223,8 +220,6 @@ git push azure HEAD:refs/heads/refactor/apim-two-appreg
   - Use `azure-pipelines.yml` in the repo root and keep environment-specific variable groups in the Azure DevOps project.
   - Prefer service connections over embedding credentials. Use Key Vault + variable groups for runtime secrets.
 
-If you want, I can scaffold an `azure-pipelines.yml` skeleton and the Azure DevOps pipeline templates next (I will need your Azure DevOps org/project/repo names or I can use placeholders).
-
 Note: the Azure DevOps repository is assumed to be new and empty. Recommended initial steps for a fresh Azure repo:
 
 - Create the repo in Azure DevOps and set the default branch (e.g., `main` or `develop`).
@@ -235,11 +230,9 @@ Note: the Azure DevOps repository is assumed to be new and empty. Recommended in
   - `src/` (the current application code pushed as a branch)
 - Immediately enable branch policies on the default branch to require PRs, enforce required pipeline checks (`check-code`, `check-infra`), and require code reviews before merge.
 
-If you want, I can scaffold the initial `azure-pipelines.yml` and a minimal first commit structure to push into the empty Azure repo.
-
 **Agent Decision Policy**
-- The repository owner authorizes the AI agent to proceed with implementation and recommendations that align with the user's stated goals without asking for explicit approval for trivial or inferable decisions.
-- The agent should only pause and request confirmation for "critical" decisions, including but not limited to:
+- The repository owner authorizes the AI agent to proceed with implementation and recommendations that align with the user's stated goals without asking for explicit approval for non-critical decisions as defined in `docs/PROJECT_MANIFEST.md`.
+- The agent should pause and request confirmation for "critical" decisions (see manifest for full list), including but not limited to:
   - Changing authentication flows or app registration configuration that affect production security.
   - Modifying Key Vault secret names, rotating secrets, or placing secrets into code or configuration.
   - Making breaking infrastructure changes that could delete or significantly alter deployed resources (for example, deleting resource groups or modifying private-networking that impacts private endpoints).
@@ -310,8 +303,6 @@ git checkout release/1.2.0
 git checkout -b feature/new-search
 git push azure feature/new-search
 ```
-
-If you want, I can update the Azure DevOps pipeline templates to enforce these branch rules and gate merges accordingly.
 
 ## Validation: Complete Coverage of User Requirements
 
