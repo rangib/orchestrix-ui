@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Orx BaseComponent Runtime Validation</title>
+    <style>
+      body { font-family: system-ui, Arial, sans-serif; padding: 24px; }
+      .ok { color: green }
+      .fail { color: red }
+    </style>
+  </head>
+  <body>
+    <h1>Orx BaseComponent Runtime Validation</h1>
+    <p id="status">Starting...</p>
+
+    <script>
+      // Provide tokens JSON via data URL mapped to global override
+      const tokens = {
+        color: { primary: '#0b74de', accent: '#ff7a59' },
+        spacing: { small: '4px', base: '8px' }
+      };
+
+      const tokensDataUrl = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(tokens));
+      window.__ORX_TOKENS_URL = tokensDataUrl;
+  // Provide a minimal policy JSON via data URL to avoid runtime fetch to /orx/policy.json
+  const policy = { allow: true };
+  const policyDataUrl = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(policy));
+  window.__ORX_POLICY_URL = policyDataUrl;
+
+      // Load built Stencil bundle if available by probing multiple likely paths.
+      async function findBundleAndLoad() {
+        const candidates = [];
+        // try relative levels: ./dist, ../dist, ../../dist, etc.
+        for (let up = 0; up <= 4; up++) {
+          const prefix = up === 0 ? '' : '../'.repeat(up);
+          candidates.push(prefix + 'dist/orchestrix-components/orchestrix-components.esm.js');
+        }
+        // also try paths relative to repository root (when server serves repo root)
+        candidates.unshift('packages/components/dist/orchestrix-components/orchestrix-components.esm.js');
+        candidates.unshift('/packages/components/dist/orchestrix-components/orchestrix-components.esm.js');
+        // also try a couple of other sensible locations
+        candidates.push('orchestrix-components/orchestrix-components.esm.js');
+        candidates.push('/dist/orchestrix-components/orchestrix-components.esm.js');
+
+        const tried = [];
+        for (const src of candidates) {
+          try {
+            const resp = await fetch(src, { method: 'GET' });
+            if (resp.ok) {
+              // load as module script
+              const script = document.createElement('script');
+              script.type = 'module';
+              script.src = src;
+              script.onload = () => {
+                document.getElementById('status').textContent = 'Stencil bundle loaded from "' + src + '". Instantiating test element...';
+
+                const el = document.createElement('orx-button');
+                el.setAttribute('label', 'Runtime test');
+                el.id = 'testBtn';
+                document.body.appendChild(el);
+
+                // Wait a bit for BaseComponent to fetch tokens and apply CSS vars
+                setTimeout(() => {
+                  console.log('Runtime: checking CSS variables on :root');
+                  const rootStyles = getComputedStyle(document.documentElement);
+                  const primary = rootStyles.getPropertyValue('--orx-color-primary').trim();
+                  const accent = rootStyles.getPropertyValue('--orx-color-accent').trim();
+                  console.log('Runtime: found', { primary, accent });
+                  const s = document.getElementById('status');
+                  if (primary === '#0b74de' && accent === '#ff7a59') {
+                    s.innerHTML = '<span class="ok">PASS</span>: CSS tokens applied to :root';
+                  } else {
+                    s.innerHTML = '<span class="fail">FAIL</span>: CSS tokens not found on :root. Values: ' + JSON.stringify({primary,accent});
+                  }
+                }, 2000);
+              };
+              script.onerror = () => {
+                document.getElementById('status').innerHTML = '<span class="fail">ERROR</span>: failed to execute bundle at "' + src + '"';
+              };
+              document.head.appendChild(script);
+              return;
+            }
+          } catch (err) {
+            // fetch failed, record and continue
+          }
+          tried.push(src);
+        }
+
+        document.getElementById('status').innerHTML = '<span class="fail">ERROR</span>: no bundle found. Paths tried: ' + JSON.stringify(tried);
+      }
+
+      findBundleAndLoad();
+    </script>
+  </body>
+</html>
