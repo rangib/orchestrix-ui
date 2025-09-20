@@ -16,4 +16,4 @@ jobs:
         with:
           inlineScript: |
             az --version
-            az bicep build infra/main.bicep --stdout
+            az bicep build --file infra/main.bicep --stdout
