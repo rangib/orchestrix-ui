@@ -18,6 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd src
+          npm i
           npm ci
       - name: Run lint
         run: |
@@ -72,8 +73,10 @@ jobs:
       - name: Install dependencies
         run: |
           cd src
+          npm i
           npm ci
       - name: Run integration tests
         run: |
           cd src
+          npm ci
           npm run test:integration

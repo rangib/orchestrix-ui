@@ -17,6 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd src
+          npm i
           npm ci
       - name: Run npm audit
         run: |
