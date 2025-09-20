@@ -10,6 +10,15 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'cobertura', 'json-summary'],
       reportsDirectory: './coverage',
+      // Enforce minimum coverage thresholds
+      thresholds: {
+        global: {
+          statements: 60,
+          branches: 50,
+          functions: 60,
+          lines: 60
+        }
+      },
       exclude: [
         'node_modules/**',
         'dist/**',

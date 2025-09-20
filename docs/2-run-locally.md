@@ -31,8 +31,10 @@ With the prerequisites complete, follow the steps below to run the solution loca
 4. Start the app by running `npm run dev`
 5. Access the app on [http://localhost:3000](http://localhost:3000)
 
+If you're on Windows, you can run basic local checks (lint/type-check/tests) before starting using: `scripts\ci-checks.ps1` from the repo root.
+
 You should now be prompted to log in with your chosen authentication method (per your Identity Provider configuration), and you can start chatting.
 
-## Continue to the next step...
+## Continue to the next step
 
 👉 [Next: Add an Identity Provider](./3-add-identity.md)
